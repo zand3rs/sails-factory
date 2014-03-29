@@ -1,0 +1,4 @@
+sails-factory
+=============
+
+Sails Factory
