@@ -1,0 +1,37 @@
+{
+  "name": "sails-factory",
+  "version": "0.0.1",
+  "description": "Simple model factory for Sails.js. Inspired by factory_girl and rosie.",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zand3rs/sails-factory.git"
+  },
+  "keywords": [
+    "sails",
+    "factory",
+    "test"
+  ],
+  "author": {
+    "name": "Alexander Magtipon",
+    "email": "zand3rs@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zand3rs/sails-factory/issues"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "util": "~0.10.3",
+    "path": "~0.4.9"
+  },
+  "devDependencies": {
+    "mocha": "~1.18.2",
+    "chai": "~1.9.1",
+    "sails": "0.9.16",
+    "sails-memory": "0.9.1"
+  }
+}
