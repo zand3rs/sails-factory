@@ -97,6 +97,7 @@ Calling .load() without parameter will try to load factory defintions from test/
     });
 
 To load factory files from different folder:
+
     Factory.load("/path/to/factories");
 
 To get the total number of loaded factory files:
