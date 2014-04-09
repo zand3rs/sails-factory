@@ -3,6 +3,10 @@ sails-factory
 
 Sails Factory is a simple model factory for Sails.js. Inspired by [factory_girl](https://github.com/thoughtbot/factory_girl) and [rosie](https://github.com/bkeepers/rosie).
 
+## Installation
+    
+    npm install sails-factory
+
 ## Usage
 
 ### Defining factories
@@ -58,7 +62,7 @@ Define a factory by giving it a name and an optional model name. The factory nam
 
 ### Loading factories
 
-Calling .load() without parameter will try to load factory defintions from test/factories folder. By default, the model name will be set to factory file name if not provided on define parameters.
+Calling .load() without parameter will try to load factory definitions from test/factories folder. By default, the model name will be set to factory file name if not provided on define parameters.
 
     // api/models/User.js
     module.exports = {
