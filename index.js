@@ -10,25 +10,60 @@ var factories = {};
 function Factory(name, modelName) {
   this.name = name;
   this.modelName = modelName || name;
+  this.usingDefaultModel = (!modelName) ? true : false;
+  this.seqs = {};
   this.attrs = {};
+
   factories[this.name] = this;
 }
 
 //==============================================================================
 
-Factory.prototype.attr = function(name, value) {
-  this.attrs[name] = value;
+Factory.prototype.attr = function(name) {
+  var self = this;
+  var args = Array.prototype.slice.call(arguments, 1);
+  var value = null;
+  var options = null;
+
+  while (arg = args.shift()) {
+    switch (typeof arg) {
+      case "object":
+        options = arg;
+        break;
+      default:
+        value = arg;
+        break;
+    }
+  }
+
+  self.seqs[name] = 0;
+  self.attrs[name] = value;
+
+  var opts = filterOptions(options);
+  if (opts.auto_increment) {
+    self.attrs[name] = function() {
+      self.seqs[name] += opts.auto_increment;
+      return ((_.isFunction(value)) ? value() : value) + self.seqs[name];
+    }
+  }
+
   return this;
 };
 
 //------------------------------------------------------------------------------
 
 Factory.prototype.parent = function(name) {
-  var self = factories[this.name];
   var factory = factories[name];
   if (!factory) throw new Error("'" + name + "' is undefined.");
 
-  return _.merge(self, factory);
+  //-- use parent model if model was not given...
+  if (this.usingDefaultModel) {
+    this.modelName = factory.modelName;
+  }
+  _.merge(this.seqs, _.clone(factory.seqs, true));
+  _.merge(this.attrs, _.clone(factory.attrs, true));
+
+  return this;
 };
 
 //==============================================================================
@@ -68,7 +103,7 @@ Factory.build = function(name) {
   var factory = factories[name];
   if (!factory) throw new Error("'" + name + "' is undefined.");
 
-  var attributes = evalAttrs(_.merge(_.clone(factory.attrs), attrs));
+  var attributes = evalAttrs(_.merge(_.clone(factory.attrs, true), attrs));
   if (callback) callback(attributes);
 };
 
@@ -93,7 +128,7 @@ Factory.create = function(name) {
   var factory = factories[name];
   if (!factory) throw new Error("'" + name + "' is undefined.");
 
-  var attributes = evalAttrs(_.merge(_.clone(factory.attrs), attrs));
+  var attributes = evalAttrs(_.merge(_.clone(factory.attrs, true), attrs));
   var Model = sails.models[factory.modelName.toLowerCase()];
 
   Model.create(attributes).done(function(err, record) {
@@ -153,9 +188,25 @@ function requireFactory(module) {
 
 //------------------------------------------------------------------------------
 
+function filterOptions(options) {
+  var opts = {};
+
+  if (!_.isObject(options)) {
+    return opts;
+  }
+  if (options.auto_increment) {
+    opts.auto_increment = (_.isNumber(options.auto_increment) && options.auto_increment > 0)
+                        ? Math.floor(options.auto_increment)
+                        : 1;
+  }
+  return opts;
+}
+
+//------------------------------------------------------------------------------
+
 function evalAttrs(attrs) {
   return _.reduce(attrs, function(result, val, key) {
-           result[key] = (typeof val == "function") ? val() : val;
+           result[key] = (_.isFunction(val)) ? val() : val;
            return result;
          }, {});
 }

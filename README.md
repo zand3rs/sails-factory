@@ -25,7 +25,6 @@ Define a factory by giving it a name and an optional model name. The factory nam
 
     Factory.define('admin_user', 'Admin').parent('user');
 
-
 ### Using factories
 
     Factory.build('active_user', function(active_user) {
@@ -57,6 +56,43 @@ Define a factory by giving it a name and an optional model name. The factory nam
       //    active: true,
       //    createdAt: <date>,
       //    updatedAt: <date>
+      // }
+    });
+
+### Auto increment attributes
+
+Attributes can have an auto_increment option. By default, sequence will increment by 1, otherwise it will increment by whatever value the auto_increment option is set to. Sequence is shared among parent and children.
+
+    Factory.define('user')
+      .attr('id', {auto_increment: true})
+      .attr('first_name', 'First Name - ', {auto_increment: 5});
+
+    Factory.define('other_user').parent('user');
+
+    Factory.build('user', function(user) {
+      // user:
+      // {
+      //    id: 1,
+      //    first_name: 'First Name - 5',
+      //    ...
+      // }
+    });
+
+    Factory.create('user', function(user) {
+      // user:
+      // {
+      //    id: 2,
+      //    first_name: 'First Name - 10',
+      //    ...
+      // }
+    });
+
+    Factory.build('other_user', function(other_user) {
+      // other_user:
+      // {
+      //    id: 3,
+      //    first_name: 'First Name - 15',
+      //    ...
       // }
     });
 

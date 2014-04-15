@@ -1,4 +1,5 @@
-var chai = require("chai"),
+var async = require("async"),
+    chai = require("chai"),
     expect = chai.expect,
     Factory = require(process.cwd());
 
@@ -114,6 +115,97 @@ describe("Factory", function() {
       Factory.load(process.cwd() + "/test/factories/sample2", function(count) {
         expect(count).to.equal(1);
         done();
+      });
+    });
+  });
+
+  describe("auto increment attributes", function() {
+    before(function() {
+      Factory.define("sample")
+        .attr("id", {auto_increment: true})
+        .attr("title", "title-", {auto_increment: 2})
+        .attr("description", "using sequence");
+
+      Factory.define("sample2").parent("sample");
+    });
+
+    it("should be shared among children", function(done) {
+      async.series([
+        function(done) {
+          Factory.build("sample", function(sample) {
+            expect(sample).to.have.property("id", 1);
+            expect(sample).to.have.property("title", "title-2");
+            done();
+          });
+        },
+        function(done) {
+          Factory.build("sample", function(sample) {
+            expect(sample).to.have.property("id", 2);
+            expect(sample).to.have.property("title", "title-4");
+            done();
+          });
+        },
+        function(done) {
+          Factory.create("sample", function(sample) {
+            expect(sample).to.have.property("id", 3);
+            expect(sample).to.have.property("title", "title-6");
+            done();
+          });
+        },
+        function(done) {
+          Factory.build("sample2", function(sample) {
+            expect(sample).to.have.property("id", 4);
+            expect(sample).to.have.property("title", "title-8");
+            done();
+          });
+        },
+        function(done) {
+          Factory.build("sample2", function(sample) {
+            expect(sample).to.have.property("id", 5);
+            expect(sample).to.have.property("title", "title-10");
+            done();
+          });
+        },
+        function(done) {
+          Factory.create("sample2", function(sample) {
+            expect(sample).to.have.property("id", 6);
+            expect(sample).to.have.property("title", "title-12");
+            done();
+          });
+        }
+      ], function(err) {
+        done(err);
+      });
+    });
+
+    it("can be overridden", function(done) {
+      async.series([
+        function(done) {
+          Factory.build("sample", {id: 99}, function(sample) {
+            expect(sample).to.have.property("id", 99);
+            done();
+          });
+        },
+        function(done) {
+          Factory.create("sample", {id: 999}, function(sample) {
+            expect(sample).to.have.property("id", 999);
+            done();
+          });
+        },
+        function(done) {
+          Factory.build("sample2", {id: 88}, function(sample) {
+            expect(sample).to.have.property("id", 88);
+            done();
+          });
+        },
+        function(done) {
+          Factory.create("sample2", {id: 888}, function(sample) {
+            expect(sample).to.have.property("id", 888);
+            done();
+          });
+        }
+      ], function(err) {
+        done(err);
       });
     });
   });
