@@ -1,6 +1,6 @@
 {
   "name": "sails-factory",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Simple model factory for Sails.js. Inspired by factory_girl and rosie.",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,8 @@
     "url": "git://github.com/zand3rs/sails-factory.git"
   },
   "keywords": [
+    "sails-factory",
+    "sails_factory",
     "sails",
     "factory",
     "test"

@@ -157,6 +157,7 @@ Factory.load = function() {
 
   //-- load all factories
   requireAll(folder, callback);
+  return this;
 };
 
 //==============================================================================
