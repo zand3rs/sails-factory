@@ -19,24 +19,10 @@ function Factory(name, modelName) {
 
 //==============================================================================
 
-Factory.prototype.attr = function(name) {
+Factory.prototype.attr = function(name, value, options) {
   var self = this;
-  var args = Array.prototype.slice.call(arguments, 1);
-  var value = null;
-  var options = null;
 
-  while (arg = args.shift()) {
-    switch (typeof arg) {
-      case "object":
-        options = arg;
-        break;
-      default:
-        value = arg;
-        break;
-    }
-  }
-
-  self.seqs[name] = 0;
+  self.seqs[name] = parseInt(value) || 0;
   self.attrs[name] = value;
 
   var opts = filterOptions(options);

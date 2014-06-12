@@ -122,7 +122,7 @@ describe("Factory", function() {
   describe("auto increment attributes", function() {
     before(function() {
       Factory.define("sample")
-        .attr("id", {auto_increment: true})
+        .attr("id", 0, {auto_increment: true})
         .attr("title", "title-", {auto_increment: 2})
         .attr("description", "using sequence");
 
