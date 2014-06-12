@@ -61,10 +61,10 @@ Define a factory by giving it a name and an optional model name. The factory nam
 
 ### Auto increment attributes
 
-Attributes can have an auto_increment option. By default, sequence will increment by 1, otherwise it will increment by whatever value the auto_increment option is set to. Sequence is shared among parent and children.
+Attributes can have an auto_increment option. By default, sequence will increment by 1, otherwise it will increment by whatever value the auto_increment option is set to. Counting starts at the initial value given. Sequence is shared among parent and children.
 
     Factory.define('user')
-      .attr('id', {auto_increment: true})
+      .attr('id', 0, {auto_increment: true})
       .attr('first_name', 'First Name - ', {auto_increment: 5});
 
     Factory.define('other_user').parent('user');
