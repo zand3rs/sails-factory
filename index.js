@@ -117,7 +117,7 @@ Factory.create = function(name) {
   var attributes = evalAttrs(_.merge(_.clone(factory.attrs, true), attrs));
   var Model = sails.models[factory.modelName.toLowerCase()];
 
-  Model.create(attributes).done(function(err, record) {
+  Model.create(attributes).exec(function(err, record) {
     if (err) throw new Error(util.inspect(err, {depth: null}));
     if (callback) callback(record);
   });
