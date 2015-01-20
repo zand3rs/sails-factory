@@ -127,7 +127,7 @@ Factory.create = function(name) {
 
 Factory.load = function() {
   var args = Array.prototype.slice.call(arguments);
-  var folder = path.join(process.cwd(), "test/factories");
+  var folder = path.join(process.cwd(), "test", "factories");
   var callback = null;
 
   while (arg = args.shift()) {

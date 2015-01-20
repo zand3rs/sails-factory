@@ -1,6 +1,6 @@
 {
   "name": "sails-factory",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Simple model factory for Sails.js. Inspired by factory_girl and rosie.",
   "main": "index.js",
   "scripts": {

@@ -1,4 +1,5 @@
 var async = require("async"),
+    path = require("path"),
     chai = require("chai"),
     expect = chai.expect,
     Factory = require(process.cwd());
@@ -112,7 +113,8 @@ describe("Factory", function() {
       });
     });
     it("should recursively load all factory definition files from the given folder", function(done) {
-      Factory.load(process.cwd() + "/test/factories/sample2", function(count) {
+      var factoryPath = path.join(process.cwd(), "test", "factories", "sample2");
+      Factory.load(factoryPath, function(count) {
         expect(count).to.equal(1);
         done();
       });
