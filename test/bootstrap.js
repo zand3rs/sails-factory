@@ -11,10 +11,16 @@ before(function(done) {
       level: "silent"
     },
     paths: {
-      models: require("path").join(process.cwd(), "test/fixtures/models")
+      models: require("path").join(process.cwd(), "test", "fixtures", "models")
     },
-    adapters: {
-      default: "sails-memory"
+    connections: {
+      default: {
+        adapter: "sails-memory"
+      }
+    },
+    models: {
+      connection: "default",
+      migrate: "alter"
     },
     session: {
       secret: "s.e.c.r.e.t"

@@ -1,6 +1,6 @@
 {
   "name": "sails-factory",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "Simple model factory for Sails.js. Inspired by factory_girl and rosie.",
   "main": "index.js",
   "scripts": {
@@ -26,15 +26,17 @@
     "url": "https://github.com/zand3rs/sails-factory/issues"
   },
   "dependencies": {
+    "inflection": "~1.5.3",
     "lodash": "~2.4.1",
-    "util": "~0.10.3",
-    "path": "~0.4.9"
+    "path": "~0.4.9",
+    "util": "~0.10.3"
   },
   "devDependencies": {
-    "mocha": "~1.18.2",
+    "async": "~0.7.0",
     "chai": "~1.9.1",
-    "sails": "0.9.16",
-    "sails-memory": "0.9.1",
-    "async": "~0.7.0"
+    "grunt": "~0.4.5",
+    "mocha": "~1.18.2",
+    "sails": "~0.10.5",
+    "sails-memory": "~0.10.3"
   }
 }

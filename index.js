@@ -2,14 +2,22 @@ var _ = require("lodash");
 var fs = require("fs");
 var path = require("path");
 var util = require("util");
+var inflection = require("inflection");
 
 var factories = {};
 
 //==============================================================================
+//-- export module
+
+module.exports = Factory;
+
+//==============================================================================
+//-- constructor
 
 function Factory(name, modelName) {
   this.name = name;
   this.modelName = modelName || name;
+  this.modelId = inflection.classify(this.modelName).toLowerCase();
   this.usingDefaultModel = (!modelName) ? true : false;
   this.seqs = {};
   this.attrs = {};
@@ -18,6 +26,7 @@ function Factory(name, modelName) {
 }
 
 //==============================================================================
+//-- instance
 
 Factory.prototype.attr = function(name, value, options) {
   var self = this;
@@ -45,6 +54,7 @@ Factory.prototype.parent = function(name) {
   //-- use parent model if model was not given...
   if (this.usingDefaultModel) {
     this.modelName = factory.modelName;
+    this.modelId = factory.modelId;
   }
   _.merge(this.seqs, _.clone(factory.seqs, true));
   _.merge(this.attrs, _.clone(factory.attrs, true));
@@ -115,7 +125,7 @@ Factory.create = function(name) {
   if (!factory) throw new Error("'" + name + "' is undefined.");
 
   var attributes = evalAttrs(_.merge(_.clone(factory.attrs, true), attrs));
-  var Model = sails.models[factory.modelName.toLowerCase()];
+  var Model = sails.models[factory.modelId];
 
   Model.create(attributes).exec(function(err, record) {
     if (err) throw new Error(util.inspect(err, {depth: null}));
@@ -147,6 +157,7 @@ Factory.load = function() {
 };
 
 //==============================================================================
+//-- private
 
 function requireAll(folder, done) {
   var files = fs.readdirSync(folder);
@@ -199,5 +210,3 @@ function evalAttrs(attrs) {
 }
 
 //==============================================================================
-
-module.exports = Factory;
