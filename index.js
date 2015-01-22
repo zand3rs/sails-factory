@@ -17,7 +17,6 @@ module.exports = Factory;
 function Factory(name, modelName) {
   this.name = name;
   this.modelName = modelName || name;
-  this.modelId = inflection.classify(this.modelName).toLowerCase();
   this.usingDefaultModel = (!modelName) ? true : false;
   this.seqs = {};
   this.attrs = {};
@@ -49,12 +48,13 @@ Factory.prototype.attr = function(name, value, options) {
 
 Factory.prototype.parent = function(name) {
   var factory = factories[name];
-  if (!factory) throw new Error("'" + name + "' is undefined.");
+  if (!factory) {
+    throw new Error("Factory '" + name + "' is undefined.");
+  }
 
   //-- use parent model if model was not given...
   if (this.usingDefaultModel) {
     this.modelName = factory.modelName;
-    this.modelId = factory.modelId;
   }
   _.merge(this.seqs, _.clone(factory.seqs, true));
   _.merge(this.attrs, _.clone(factory.attrs, true));
@@ -97,10 +97,12 @@ Factory.build = function(name) {
   }
 
   var factory = factories[name];
-  if (!factory) throw new Error("'" + name + "' is undefined.");
+  if (!factory) {
+    throw new Error("Factory '" + name + "' is undefined.");
+  }
 
   var attributes = evalAttrs(_.merge(_.clone(factory.attrs, true), attrs));
-  if (callback) callback(attributes);
+  callback && callback(attributes);
 };
 
 //------------------------------------------------------------------------------
@@ -121,15 +123,28 @@ Factory.create = function(name) {
     }
   }
 
+  //-- check if sails is up...
+  if (!sails) {
+    throw new Error("Sails is not available.");
+  }
+
   var factory = factories[name];
-  if (!factory) throw new Error("'" + name + "' is undefined.");
+  if (!factory) {
+    throw new Error("Factory '" + name + "' is undefined.");
+  }
 
   var attributes = evalAttrs(_.merge(_.clone(factory.attrs, true), attrs));
-  var Model = sails.models[factory.modelId];
+  var modelId = inflection.classify(factory.modelName).toLowerCase();
+  var Model = sails.models[modelId];
+  if (!Model) {
+    throw new Error("Sails model '" + modelId + "' is undefined.");
+  }
 
   Model.create(attributes).exec(function(err, record) {
-    if (err) throw new Error(util.inspect(err, {depth: null}));
-    if (callback) callback(record);
+    if (err) {
+      throw new Error(util.inspect(err, {depth: null}));
+    }
+    callback && callback(record);
   });
 };
 
@@ -174,7 +189,7 @@ function requireAll(folder, done) {
     }
   });
 
-  if (done) done(count);
+  done && done(count);
 }
 
 //------------------------------------------------------------------------------
