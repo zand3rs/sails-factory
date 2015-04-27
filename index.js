@@ -134,7 +134,7 @@ Factory.create = function(name) {
   }
 
   var attributes = evalAttrs(_.merge(_.clone(factory.attrs, true), attrs));
-  var modelId = inflection.classify(factory.modelName).toLowerCase();
+  var modelId = inflection.camelize(factory.modelName).toLowerCase();
   var Model = sails.models[modelId];
   if (!Model) {
     throw new Error("Sails model '" + modelId + "' is undefined.");
