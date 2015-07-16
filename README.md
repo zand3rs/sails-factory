@@ -27,6 +27,25 @@ Define a factory by giving it a name and an optional model name. The factory nam
 
 ### Using factories
 
+    //-- synchronous
+    var active_user = factory.build("active_user");
+    // active_user: non-persistent "active_user" instance
+    // {
+    //    first_name: "First Name",
+    //    last_name: "Last Name",
+    //    random_id: <number>,
+    //    active: true
+    // }
+
+    var user = factory.build("user", {first_name: "Hello", last_name: function() { return "World"; }});
+    // user: non-persistent "user" instance
+    // {
+    //    first_name: "Hello",
+    //    last_name: "World",
+    //    random_id: <number>
+    // }
+
+    //-- asynchronous
     factory.build("active_user", function(active_user) {
       // active_user: non-persistent "active_user" instance
       // {
