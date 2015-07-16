@@ -103,6 +103,8 @@ Factory.build = function(name) {
 
   var attributes = evalAttrs(_.merge(_.clone(factory.attrs, true), attrs));
   callback && callback(attributes);
+
+  return attributes;
 };
 
 //------------------------------------------------------------------------------

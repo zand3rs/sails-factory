@@ -64,18 +64,33 @@ describe("Factory", function() {
         .attr("hello", function() { return "ok"; });
     });
 
-    it("should return an object instance of a defined factory", function(done) {
-      Factory.build("sample", function(sample) {
-        expect(sample).to.have.property("foo", "bar");
-        expect(sample).to.have.property("hello", "ok");
-        done();
+    describe("with callback", function() {
+      it("should return an object instance of a defined factory", function(done) {
+        Factory.build("sample", function(sample) {
+          expect(sample).to.have.property("foo", "bar");
+          expect(sample).to.have.property("hello", "ok");
+          done();
+        });
+      });
+      it("should return an object instance of a defined factory with overridden attributes", function(done) {
+        Factory.build("sample", {"foo": "baz"}, function(sample) {
+          expect(sample).to.have.property("foo", "baz");
+          expect(sample).to.have.property("hello", "ok");
+          done();
+        });
       });
     });
-    it("should return an object instance of a defined factory with overridden attributes", function(done) {
-      Factory.build("sample", {"foo": "baz"}, function(sample) {
+
+    describe("without callback", function() {
+      it("should return an object instance of a defined factory", function() {
+        var sample = Factory.build("sample");
+        expect(sample).to.have.property("foo", "bar");
+        expect(sample).to.have.property("hello", "ok");
+      });
+      it("should return an object instance of a defined factory with overridden attributes", function() {
+        var sample = Factory.build("sample", {"foo": "baz"});
         expect(sample).to.have.property("foo", "baz");
         expect(sample).to.have.property("hello", "ok");
-        done();
       });
     });
   });
