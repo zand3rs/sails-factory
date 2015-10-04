@@ -5,8 +5,10 @@
 
 //==============================================================================
 
+var Sails = require("sails");
+
 before(function(done) {
-  require("sails").lift({
+  Sails.lift({
     log: {
       level: "silent"
     },
@@ -26,12 +28,21 @@ before(function(done) {
       secret: "s.e.c.r.e.t"
     }
   }, function(err, sails) {
-    done(err);
+    done && done(err, sails);
   });
 });
 
 //------------------------------------------------------------------------------
 
 after(function(done) {
-  (typeof sails != "undefined") ? sails.lower(done) : done();
+  //-- NOTE: This is a workaround for sails.lower multiple callback calls...
+  var _shutting_down = false;
+  function _shutdown(err) {
+    if (!_shutting_down) {
+      _shutting_down = true;
+      done && done(err);
+    }
+  }
+
+  Sails.lower(_shutdown);
 });
