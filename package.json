@@ -26,16 +26,16 @@
     "url": "https://github.com/zand3rs/sails-factory/issues"
   },
   "dependencies": {
-    "inflection": "^1.7.1",
-    "lodash": "^3.10.1",
-    "util": "^0.10.3"
+    "lodash": "^4.17.5",
+    "upath": "^1.0.4"
   },
   "devDependencies": {
     "async": "^1.4.2",
     "chai": "^3.3.0",
     "grunt": "^0.4.5",
     "mocha": "^2.3.3",
-    "sails": "^0.10.5",
+    "node-test-helper": "^1.0.0",
+    "sails": "^0.11.3",
     "sails-memory": "^0.10.5"
   }
 }
