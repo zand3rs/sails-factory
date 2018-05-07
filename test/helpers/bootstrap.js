@@ -26,6 +26,12 @@ before(function(done) {
     },
     session: {
       secret: "s.e.c.r.e.t"
+    },
+    hooks: {
+      grunt: false,
+      session: false,
+      sockets: false,
+      pubsub: false
     }
   }, function(err, sails) {
     done && done(err, sails);
